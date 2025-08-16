@@ -4,7 +4,7 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
+export ZSH="$HOME/.oh-my-zsh"
 source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -12,6 +12,9 @@ source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
 alias reload-zsh="source ~/.zshrc"
 alias edit-zsh="nvim ~/.zshrc"
+
+# Oh My zsh Plugins
+plugins=(git git-commit golang kind kubectl docker)
 
 # history setup
 HISTFILE=$HOME/.zhistory
@@ -70,8 +73,6 @@ _fzf_compgen_dir() {
   fd --type=d --hidden --exclude .git . "$1"
 }
 
-source ~/fzf-git.sh/fzf-git.sh
-
 show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
 
 export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
@@ -114,14 +115,5 @@ alias cd="z"
 alias python="python3"
 PATH=/Users/joseanmartinez/.rbenv/shims:/Users/joseanmartinez/.rbenv/shims:/Users/joseanmartinez/.nvm/versions/node/v18.18.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/joseanmartinez/.ebcli-virtual-env/executables:/Users/joseanmartinez/.spicetify:/Users/joseanmartinez/.spicetify:~/Library/Python/3.12/bin
 
-# --- Yazi Setup ---
-export EDITOR="nvim"
+source $ZSH/oh-my-zsh.sh
 
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
-}
